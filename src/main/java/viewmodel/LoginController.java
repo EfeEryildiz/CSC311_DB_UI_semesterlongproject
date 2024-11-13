@@ -82,7 +82,6 @@ public class LoginController {
             return true;
         }
 
-        // TODO: Add database credential checking here
         // For now, allow test/test123 as an additional login
         return username.equals("test") && password.equals("test123");
     }
