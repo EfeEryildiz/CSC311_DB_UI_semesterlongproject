@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fitToWidth="true" xmlns:fx="http://javafx.com/fxml">
+    <VBox spacing="10">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <Text styleClass="guide-header" text="Student Management System - User Guide"/>
+
+        <Text styleClass="guide-section" text="Basic Operations"/>
+        <Text wrappingWidth="500" text="• Add a new student: Fill in the form fields and click 'Add'"/>
+        <Text wrappingWidth="500" text="• Edit a student: Select a row, modify fields, and click 'Edit'"/>
+        <Text wrappingWidth="500" text="• Delete a student: Select a row and click 'Delete'"/>
+
+        <Text styleClass="guide-section" text="Data Management"/>
+        <Text wrappingWidth="500" text="• Import Data: Use File > Import Data to import CSV files"/>
+        <Text wrappingWidth="500" text="• Export Data: Use File > Export Data to save as CSV"/>
+        <Text wrappingWidth="500" text="• Refresh Table: Press F5 or use View > Refresh Table"/>
+
+        <Text styleClass="guide-section" text="Keyboard Shortcuts"/>
+        <Text wrappingWidth="500" text="F5: Refresh Table"/>
+        <Text wrappingWidth="500" text="Ctrl+E: Edit Selected Record"/>
+        <Text wrappingWidth="500" text="Delete: Remove Selected Record"/>
+    </VBox>
+</ScrollPane>

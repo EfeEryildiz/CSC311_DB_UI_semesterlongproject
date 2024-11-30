@@ -12,6 +12,7 @@ public class UserSession {
     private final Preferences userPreferences;
     private static final String PREF_NODE = "com.example.app.usersession";
     private static final MyLogger logger = new MyLogger();
+    private static final Object LOCK = new Object();
 
     private String userName;
     private String password;

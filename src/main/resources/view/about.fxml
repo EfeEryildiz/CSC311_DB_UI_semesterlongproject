@@ -1,21 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <TextArea layoutX="6.0" layoutY="51.0" prefHeight="343.0" prefWidth="584.0" text="Your text goes here " wrapText="true">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </TextArea>
-      <Label alignment="TOP_LEFT" layoutX="8.0" layoutY="11.0" prefHeight="44.0" prefWidth="542.0" text="Developer: MM mM">
-         <font>
-            <Font name="System Bold" size="26.0" />
-         </font>
-      </Label>
-   </children>
-</AnchorPane>
+<VBox alignment="TOP_CENTER" spacing="20" styleClass="about-container"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="viewmodel.AboutController">
+
+   <padding>
+      <Insets top="30" right="40" bottom="30" left="40"/>
+   </padding>
+
+   <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+      <Image url="@../images/fsclogo.png"/>
+   </ImageView>
+
+   <Label styleClass="about-title" text="Student Management System"/>
+   <Label styleClass="about-version" text="Version 1.0"/>
+
+   <Text styleClass="about-description" textAlignment="CENTER" wrappingWidth="400"
+         text="A comprehensive solution for managing student records at Farmingdale State College."/>
+
+   <GridPane vgap="10" hgap="20" alignment="CENTER">
+      <columnConstraints>
+         <ColumnConstraints minWidth="100" />
+         <ColumnConstraints minWidth="200" />
+      </columnConstraints>
+
+      <Label text="Developer:" styleClass="about-label"
+             GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+      <Label text="Efe Eryildiz" styleClass="about-value"
+             GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+      <Label text="Organization:" styleClass="about-label"
+             GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+      <Label text="Farmingdale State College" styleClass="about-value"
+             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+      <Label text="Department:" styleClass="about-label"
+             GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+      <Label text="Computer Science" styleClass="about-value"
+             GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+      <Label text="Course:" styleClass="about-label"
+             GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+      <Label text="CSC 311 - Advanced Programming" styleClass="about-value"
+             GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+   </GridPane>
+
+   <VBox alignment="CENTER" spacing="5">
+      <Label text="For support and documentation, visit:" styleClass="about-label"/>
+      <Hyperlink text="https://www.farmingdale.edu/information-technology/helpdesk.shtml"
+                 styleClass="about-link"
+                 onAction="#openSupportLink"/>
+   </VBox>
+
+   <Text styleClass="about-copyright"
+         text="© 2024 Farmingdale State College. All Rights Reserved."/>
+</VBox>

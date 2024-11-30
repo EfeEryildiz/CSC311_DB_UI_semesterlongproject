@@ -2,6 +2,7 @@ module com.example.csc311_db_ui_semesterlongproject {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires java.desktop;
     requires java.prefs;
 
 
@@ -11,4 +12,5 @@ module com.example.csc311_db_ui_semesterlongproject {
     exports dao;
     opens model;
     exports model;
+    exports util;
 }

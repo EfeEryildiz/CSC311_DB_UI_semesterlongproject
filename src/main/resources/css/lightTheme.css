@@ -1,107 +1,139 @@
-.db_btn {
-    -fx-background-color: #5baa33;
-    -fx-cursor: hand;
-    -fx-font-family: "Arial";
-    -fx-font-size: 15px;
-    -fx-text-alignment: center;
-    -fx-text-fill: #000000;
-    -fx-alignment: CENTER;
-    -fx-background-radius: 10;
-    -fx-pref-width:200px;
-    -fx-pref-height: 50px;
+.main-container {
+    -fx-background-color: #f5f5f5;
 }
 
-.left_pane {
-    -fx-background-color: #5BAA33FF;
-    -fx-pref-width: 130px;
-    -fx-pref-height: 600px;
+.menu-bar {
+    -fx-background-color: #2c3e50;
 }
 
-.admin_section {
-    -fx-background-color: #999;
-}
-
-.table_columns {
-    -fx-background-color: white;
+.menu-bar .label {
     -fx-text-fill: black;
 }
 
-
-.menu_bar {
-    -fx-background-color: #5BAA33FF;
+.title-bar {
+    -fx-background-color: #3498db;
 }
 
-.anchor_pane {
-    -fx-background-color: #5BAA33FF;
+.title-text {
+    -fx-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
 }
 
-.text_field_pane {
-    -fx-background-color: #79dc05;
-
+.content-pane {
+    -fx-background-color: transparent;
 }
 
-.image_view{
-    -fx-background-color: yellow;
-    -fx-border-color: black;
-    -fx-border-width: 2;
+.form-container {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
 }
 
-
-
-
-.table-view .column-header,
-.table-view .column-header-background .filler {
-    -fx-background-color:  #999999;
-     -fx-text-fill: black;
-}
-.table-view .column-header .label{
-   -fx-text-fill: white;
-   -fx-font-weight: bold;
-   -fx-alignment: CENTER_LEFT;
-}
-.table-view .cell{
-   -fx-cell-size: 35;
-  -fx-alignment: center-left;
-  -fx-background-color: #FFFFFF;
-  -fx-border-color: #29292D;
-  -fx-text-fill: black;
-  -fx-alignment: CENTER_LEFT;
-
-}
-.table-row-cell:selected {
-   -fx-background-color: whitesmoke;
-   -fx-text-background-color:  #33FF55;
-
-
-}
-.table-view:focused .table-row-cell:selected .table-cell {
-    -fx-background-color: lightBlue;
-    -fx-text-fill: grey;
-}
-/* scroll bar starts here */
-
-/* The increment and decrement button CSS class of scrollbar */
-.table-view .increment-button ,.table-view .decrement-button {
-    -fx-background-color:transparent;
-	-fx-background-radius: 2em;
-
+.form-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
 }
 
-/* The main scrollbar **track** CSS class  */
-.table-view .scroll-bar:horizontal .track,
-.table-view .scroll-bar:vertical .track{
-	-fx-background-color: transparent;
-	-fx-border-color:derive( #FFFFFF,80%);
-
-	-fx-background-radius: 2em;
-	-fx-border-radius:2em;
+.form-field {
+    -fx-pref-height: 35px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
 }
 
-/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
-.table-view .scroll-bar:horizontal .thumb,
-.table-view .scroll-bar:vertical .thumb {
-    -fx-background-color:derive( #FFFFFF,90%);
-	-fx-background-insets: 1, 0, 0;
-	-fx-background-radius: 2em;
+.form-field:focused {
+    -fx-border-color: #3498db;
+}
 
+.primary-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-pref-height: 35px;
+}
+
+.secondary-button {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-pref-height: 35px;
+}
+
+.warning-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-pref-height: 35px;
+}
+
+.data-table {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.data-table .column-header {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.status-bar {
+    -fx-background-color: #2c3e50;
+}
+
+.status-text {
+    -fx-text-fill: white;
+}
+
+.profile-image {
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+}
+.about-container {
+    -fx-background-color: white;
+}
+
+.about-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.about-version {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7f8c8d;
+}
+
+.about-description {
+    -fx-font-size: 14px;
+    -fx-fill: #34495e;
+    -fx-text-alignment: center;
+}
+
+.about-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.about-value {
+    -fx-text-fill: #34495e;
+}
+
+.about-link {
+    -fx-text-fill: #3498db;
+    -fx-font-size: 13px;
+}
+
+.about-copyright {
+    -fx-font-size: 12px;
+    -fx-fill: #95a5a6;
 }

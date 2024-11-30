@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Person;
 import service.MyLogger;
@@ -43,7 +44,9 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     private Button editBtn, deleteBtn, addBtn;
     @FXML
-    private MenuItem editMenuItem, deleteMenuItem, importMenuItem, exportMenuItem;
+    private MenuItem editMenuItem;
+    @FXML
+    private MenuItem deleteMenuItem;
     @FXML
     private Label statusLabel;
     @FXML
@@ -420,10 +423,6 @@ public class DB_GUI_Controller implements Initializable {
             alert.showAndWait();
         });
     }
-
-    // Theme management methods
-    // Continuing from previous implementation...
-
     @FXML
     public void lightTheme(ActionEvent actionEvent) {
         try {
@@ -558,6 +557,52 @@ public class DB_GUI_Controller implements Initializable {
             this.fname = firstName;
             this.lname = lastName;
             this.major = major;
+        }
+    }
+    @FXML
+    private void refreshTable() {
+        try {
+            data.clear();
+            data.addAll(cnUtil.getData());
+            showStatus("Table data refreshed successfully");
+            logger.makeLog("Table refresh performed");
+        } catch (Exception e) {
+            showError("Refresh Error", "Unable to refresh table data: " + e.getMessage());
+            logger.makeLog("Table refresh failed: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void showUserGuide() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/userguide.fxml"));
+            Parent root = loader.load();
+
+            Stage guideStage = new Stage();
+            guideStage.setTitle("Student Management System - User Guide");
+            guideStage.initModality(Modality.APPLICATION_MODAL);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/lightTheme.css").toExternalForm());
+
+            guideStage.setScene(scene);
+            guideStage.show();
+
+            logger.makeLog("User guide displayed");
+        } catch (IOException e) {
+            showError("Guide Error", "Unable to display user guide: " + e.getMessage());
+            logger.makeLog("Failed to show user guide: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void openSupportLink(ActionEvent event) {
+        try {
+            java.awt.Desktop.getDesktop().browse(
+                    new java.net.URI("https://www.farmingdale.edu/information-technology/helpdesk.shtml")
+            );
+        } catch (Exception e) {
+            showError("Link Error", "Unable to open support website: " + e.getMessage());
+            logger.makeLog("Failed to open support link: " + e.getMessage());
         }
     }
 }
