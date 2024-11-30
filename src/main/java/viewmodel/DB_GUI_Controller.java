@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import model.Person;
 import service.MyLogger;
 import service.UserSession;
@@ -266,36 +268,51 @@ public class DB_GUI_Controller implements Initializable {
                 new FileChooser.ExtensionFilter("CSV Files", "*.csv")
         );
 
-        File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
-        if (file != null) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                int importCount = 0;
-                // Skip header
-                reader.readLine();
-                while ((line = reader.readLine()) != null) {
-                    String[] fields = line.split(",");
-                    if (fields.length >= 6) {
-                        Person p = new Person(
-                                fields[0].trim(), // firstName
-                                fields[1].trim(), // lastName
-                                fields[2].trim(), // department
-                                fields[3].trim(), // major
-                                fields[4].trim(), // email
-                                fields[5].trim()  // imageURL
-                        );
-                        cnUtil.insertUser(p);
-                        p.setId(cnUtil.retrieveId(p));
-                        data.add(p);
-                        importCount++;
+        // Get the current window from any available scene node
+        Window currentWindow = null;
+        if (tv != null) {
+            currentWindow = tv.getScene().getWindow();
+        } else if (addBtn != null) {
+            currentWindow = addBtn.getScene().getWindow();
+        } else if (first_name != null) {
+            currentWindow = first_name.getScene().getWindow();
+        }
+
+        if (currentWindow != null) {
+            File file = fileChooser.showOpenDialog(currentWindow);
+            if (file != null) {
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    int importCount = 0;
+                    reader.readLine(); // Skip header
+
+                    while ((line = reader.readLine()) != null) {
+                        String[] fields = line.split(",");
+                        if (fields.length >= 6) {
+                            Person p = new Person(
+                                    fields[0].trim(),
+                                    fields[1].trim(),
+                                    fields[2].trim(),
+                                    fields[3].trim(),
+                                    fields[4].trim(),
+                                    fields[5].trim()
+                            );
+                            cnUtil.insertUser(p);
+                            p.setId(cnUtil.retrieveId(p));
+                            data.add(p);
+                            importCount++;
+                        }
                     }
+                    showStatus(String.format("Successfully imported %d records!", importCount));
+                    logger.makeLog("CSV import completed: " + importCount + " records");
+                } catch (IOException e) {
+                    showError("Import Error", "Failed to import CSV file: " + e.getMessage());
+                    logger.makeLog("CSV import failed: " + e.getMessage());
                 }
-                showStatus(String.format("Successfully imported %d records!", importCount));
-                logger.makeLog("CSV import completed: " + importCount + " records");
-            } catch (IOException e) {
-                showError("Import Error", "Failed to import CSV file: " + e.getMessage());
-                logger.makeLog("CSV import failed: " + e.getMessage());
             }
+        } else {
+            showError("Import Error", "Unable to determine current window");
+            logger.makeLog("CSV import failed: Could not determine current window");
         }
     }
 
@@ -306,31 +323,58 @@ public class DB_GUI_Controller implements Initializable {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("CSV Files", "*.csv")
         );
+        fileChooser.setInitialFileName("student_records.csv");
 
-        File file = fileChooser.showSaveDialog(menuBar.getScene().getWindow());
-        if (file != null) {
-            try (PrintWriter writer = new PrintWriter(file)) {
-                // Write header
-                writer.println("First Name,Last Name,Department,Major,Email,ImageURL");
-
-                // Write data
-                for (Person p : data) {
-                    writer.println(String.format("%s,%s,%s,%s,%s,%s",
-                            p.getFirstName(),
-                            p.getLastName(),
-                            p.getDepartment(),
-                            p.getMajor(),
-                            p.getEmail(),
-                            p.getImageURL()
-                    ));
-                }
-                showStatus("Data exported successfully!");
-                logger.makeLog("CSV export completed: " + data.size() + " records");
-            } catch (IOException e) {
-                showError("Export Error", "Failed to export CSV file: " + e.getMessage());
-                logger.makeLog("CSV export failed: " + e.getMessage());
-            }
+        // Get the current window from any available scene node
+        Window currentWindow = null;
+        if (tv != null) {
+            currentWindow = tv.getScene().getWindow();
+        } else if (addBtn != null) {
+            currentWindow = addBtn.getScene().getWindow();
+        } else if (first_name != null) {
+            currentWindow = first_name.getScene().getWindow();
         }
+
+        if (currentWindow != null) {
+            File file = fileChooser.showSaveDialog(currentWindow);
+            if (file != null) {
+                try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+                    // Write header
+                    writer.println("First Name,Last Name,Department,Major,Email,Image URL");
+
+                    // Write data
+                    for (Person p : data) {
+                        writer.println(String.format("%s,%s,%s,%s,%s,%s",
+                                escapeCSV(p.getFirstName()),
+                                escapeCSV(p.getLastName()),
+                                escapeCSV(p.getDepartment()),
+                                escapeCSV(p.getMajor()),
+                                escapeCSV(p.getEmail()),
+                                escapeCSV(p.getImageURL())
+                        ));
+                    }
+                    showStatus("Data exported successfully!");
+                    logger.makeLog("CSV export completed: " + data.size() + " records");
+                } catch (IOException e) {
+                    showError("Export Error", "Failed to export CSV file: " + e.getMessage());
+                    logger.makeLog("CSV export failed: " + e.getMessage());
+                }
+            }
+        } else {
+            showError("Export Error", "Unable to determine current window");
+            logger.makeLog("CSV export failed: Could not determine current window");
+        }
+    }
+
+    private String escapeCSV(String value) {
+        if (value == null) {
+            return "";
+        }
+        // Add quotes if the value contains comma or quotes
+        if (value.contains(",") || value.contains("\"")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return value;
     }
 
     @FXML
@@ -426,10 +470,15 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     public void lightTheme(ActionEvent actionEvent) {
         try {
-            Scene scene = menuBar.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(getClass().getResource("/css/lightTheme.css").toExternalForm());
-            showStatus("Light theme applied");
+            // Get the scene from the event source instead of the MenuBar
+            Node source = (Node) actionEvent.getSource();
+            Scene scene = source.getScene();
+
+            if (scene != null) {
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add(getClass().getResource("/css/lightTheme.css").toExternalForm());
+                showStatus("Light theme applied");
+            }
         } catch (Exception e) {
             showError("Theme Error", "Failed to apply light theme: " + e.getMessage());
             logger.makeLog("Theme change failed: " + e.getMessage());
@@ -439,10 +488,15 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     public void darkTheme(ActionEvent actionEvent) {
         try {
-            Scene scene = menuBar.getScene();
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(getClass().getResource("/css/darkTheme.css").toExternalForm());
-            showStatus("Dark theme applied");
+            // Get the scene from the event source instead of the MenuBar
+            Node source = (Node) actionEvent.getSource();
+            Scene scene = source.getScene();
+
+            if (scene != null) {
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add(getClass().getResource("/css/darkTheme.css").toExternalForm());
+                showStatus("Dark theme applied");
+            }
         } catch (Exception e) {
             showError("Theme Error", "Failed to apply dark theme: " + e.getMessage());
             logger.makeLog("Theme change failed: " + e.getMessage());
