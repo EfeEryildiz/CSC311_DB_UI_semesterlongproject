@@ -470,14 +470,18 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     public void lightTheme(ActionEvent actionEvent) {
         try {
-            // Get the scene from the event source instead of the MenuBar
-            Node source = (Node) actionEvent.getSource();
-            Scene scene = source.getScene();
-
+            Scene scene = findSceneFromAnyNode();
             if (scene != null) {
                 scene.getStylesheets().clear();
-                scene.getStylesheets().add(getClass().getResource("/css/lightTheme.css").toExternalForm());
-                showStatus("Light theme applied");
+                URL cssUrl = getClass().getResource("/css/lightTheme.css");
+                if (cssUrl != null) {
+                    scene.getStylesheets().add(cssUrl.toExternalForm());
+                    showStatus("Light theme applied successfully");
+                } else {
+                    throw new IllegalStateException("Light theme CSS file not found");
+                }
+            } else {
+                throw new IllegalStateException("No active scene found");
             }
         } catch (Exception e) {
             showError("Theme Error", "Failed to apply light theme: " + e.getMessage());
@@ -488,19 +492,45 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     public void darkTheme(ActionEvent actionEvent) {
         try {
-            // Get the scene from the event source instead of the MenuBar
-            Node source = (Node) actionEvent.getSource();
-            Scene scene = source.getScene();
-
+            Scene scene = findSceneFromAnyNode();
             if (scene != null) {
                 scene.getStylesheets().clear();
-                scene.getStylesheets().add(getClass().getResource("/css/darkTheme.css").toExternalForm());
-                showStatus("Dark theme applied");
+                URL cssUrl = getClass().getResource("/css/darkTheme.css");
+                if (cssUrl != null) {
+                    scene.getStylesheets().add(cssUrl.toExternalForm());
+                    showStatus("Dark theme applied successfully");
+                } else {
+                    throw new IllegalStateException("Dark theme CSS file not found");
+                }
+            } else {
+                throw new IllegalStateException("No active scene found");
             }
         } catch (Exception e) {
             showError("Theme Error", "Failed to apply dark theme: " + e.getMessage());
             logger.makeLog("Theme change failed: " + e.getMessage());
         }
+    }
+
+    private Scene findSceneFromAnyNode() {
+        // Try to get scene from various UI components in order of reliability
+        if (tv != null && tv.getScene() != null) {
+            return tv.getScene();
+        }
+        if (first_name != null && first_name.getScene() != null) {
+            return first_name.getScene();
+        }
+        if (addBtn != null && addBtn.getScene() != null) {
+            return addBtn.getScene();
+        }
+
+        // If no direct node access is available, try to find any node in the scene
+        for (Node node : tv.getParent().getChildrenUnmodifiable()) {
+            if (node.getScene() != null) {
+                return node.getScene();
+            }
+        }
+
+        return null;
     }
 
     @FXML
